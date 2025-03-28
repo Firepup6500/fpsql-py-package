@@ -1,6 +1,18 @@
+exitcode=
 if [ -z "$(git ls-files -m -o --exclude-from=.gitignore)" ];then
-  exit 0
+  echo No unstaged changes detected
 else
-  echo Uncommited changes! Refusing to push.
+  echo The following files have unstaged changes:
+  git ls-files -m -o --exclude-from=.gitignore
+fi
+if [ -z "$(git status --porcelain -M|grep '^[^?]')" ];then
+  echo No uncommited changes detected
+else
+  echo The following files have uncommited changes:
+  git status --porcelain -M|grep '^[^?]'
+fi
+if [ -z "$exitcode" ];then
+  unset exitcode
+  echo Refusing to push
   exit 1
 fi
