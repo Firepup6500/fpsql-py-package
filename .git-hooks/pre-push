@@ -1,0 +1,6 @@
+if [ -z "$(git ls-files -m -o --exclude-from=.gitignore)" ];then
+  exit 0
+else
+  echo Uncommited changes! Refusing to push.
+  exit 1
+fi
