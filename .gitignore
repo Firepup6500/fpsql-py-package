@@ -8,3 +8,5 @@ venv/**
 replit*txt
 .config/**
 .replit
+**/dist/**
+**/.env
