@@ -1,6 +1,8 @@
 # FPSQL
 An easy to use SQLite package
 #### Change log:
+###### v.1.0.7:
+Critical bug fixes, pylint
 ###### v.1.0.6:
 Add AsyncSql, start working on dict actions
 ###### v.1.0.5:

@@ -1,11 +1,17 @@
 """Firepup650's SQL Package"""
 
+# pylint: disable=useless-suppression
+# pylint: disable=attribute-defined-outside-init
+# pylint: enable=useless-suppression
+
 from typing import Any
-import sqlite3, aiosqlite, ast, pydoc
 from asyncio import run as aRun
+import sqlite3, ast, pydoc, aiosqlite
 
 
 def alias(Function):
+    "N/A"
+
     def decorator(f):
         f.__doc__ = (
             "This method is an alias of the following method:\n\n"
@@ -16,13 +22,15 @@ def alias(Function):
     return decorator
 
 
-__VERSION__ = "1.0.6"
-__NEW__ = "Add AsyncSql, start working on dict actions"
+__VERSION__ = "1.0.7"
+__NEW__ = "Critical bug fixes, pylint"
 __LICENSE__ = "MIT"
 
 
 class sql:
-    def addTable(self, tableName: str, mode: int = 0, address: str = "") -> None:
+    "ReplDB-like SQL implementation"
+
+    def addTable(self, tableName: str) -> None:  # , mode: int = 0, address: str = ""
         """# Function: sql.addTable
           Adds a table to the database
         # Inputs:
@@ -86,7 +94,7 @@ class sql:
 
         # Raises:
           AttributeError - If the table is unset"""
-        return get(name)
+        return self.get(name)
 
     def get(self, name: str) -> Any:
         """# Function: sql.get
@@ -108,7 +116,7 @@ class sql:
         if data:
             try:
                 return ast.literal_eval(data[0])
-            except:
+            except ValueError:
                 return data[0]
         return None
 
@@ -124,7 +132,7 @@ class sql:
 
         # Raises:
           AttributeError - If the table is unset"""
-        return set(name)
+        return self.set(name, value)
 
     def set(self, name: str, value: object) -> int:
         """# Function: sql.set
@@ -140,20 +148,19 @@ class sql:
           AttributeError - If the table is unset"""
         if not self.__table:
             raise AttributeError("Attempted to write to unset table")
-        if self.get(name) != None:
+        if self.get(name) is not None:
             self.__con.execute(
                 f"""UPDATE "{self.__table}" SET value = ? WHERE name = ?""",
                 (str(value), name),
             )
             self.__con.commit()
             return 2
-        else:
-            self.__con.execute(
-                f"""INSERT INTO "{self.__table}" (name, value) VALUES (?, ?)""",
-                (name, str(value)),
-            )
-            self.__con.commit()
-            return 1
+        self.__con.execute(
+            f"""INSERT INTO "{self.__table}" (name, value) VALUES (?, ?)""",
+            (name, str(value)),
+        )
+        self.__con.commit()
+        return 1
 
     def delete(self, name: str) -> None:
         """# Function: sql.delete
@@ -208,7 +215,11 @@ class sql:
 
 
 class asyncSql:
-    async def addTable(self, tableName: str, mode: int = 0, address: str = "") -> None:
+    "ReplDB-like AsyncSQL implementation"
+
+    async def addTable(
+        self, tableName: str  # , mode: int = 0, address: str = ""
+    ) -> None:
         """# Function: sql.addTable
           Adds a table to the database
         # Inputs:
@@ -275,7 +286,7 @@ class asyncSql:
 
         # Raises:
           AttributeError - If the table is unset"""
-        return await get(name)
+        return await self.get(name)
 
     async def get(self, name: str) -> Any:
         """# Function: sql.get
@@ -298,7 +309,7 @@ class asyncSql:
             if data:
                 try:
                     return ast.literal_eval(data[0])
-                except:
+                except ValueError:
                     return data[0]
             return None
 
@@ -313,7 +324,7 @@ class asyncSql:
 
         # Raises:
           AttributeError - If the table is unset"""
-        return await set()
+        return await self.set(name, value)
 
     async def set(self, name: str, value: object) -> int:
         """# Function: sql.set
@@ -330,20 +341,19 @@ class asyncSql:
         async with aiosqlite.connect(self.__db) as con:
             if not self.__table:
                 raise AttributeError("Attempted to write to unset table")
-            if await self.get(name) != None:
+            if await self.get(name) is not None:
                 await con.execute(
                     f"""UPDATE "{self.__table}" SET value = ? WHERE name = ?""",
                     (str(value), name),
                 )
                 await con.commit()
                 return 2
-            else:
-                await con.execute(
-                    f"""INSERT INTO "{self.__table}" (name, value) VALUES (?, ?)""",
-                    (name, str(value)),
-                )
-                await con.commit()
-                return 1
+            await con.execute(
+                f"""INSERT INTO "{self.__table}" (name, value) VALUES (?, ?)""",
+                (name, str(value)),
+            )
+            await con.commit()
+            return 1
 
     async def delete(self, name: str) -> None:
         """# Function: sql.delete
@@ -393,6 +403,5 @@ class asyncSql:
 
         # Raises:
           None"""
-        self.__con = None  # type: ignore[assignment]
         self.__db = ""
         self.__table = ""

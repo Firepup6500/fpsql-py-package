@@ -1,3 +1,4 @@
+# pylint: skip-file
 def build():
     from os import system as cmd
     from editor import edit

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fpsql"
-version = "1.0.6"
+version = "1.0.7"
 authors = ["Firepup650 <firepyp650@gmail.com>"]
 description = "An easy to use SQLite package"
 readme = "README.md"
@@ -22,8 +22,7 @@ Replit = "https://replit.com/@Firepup650/firepup650-SQL-Package"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-
-[tool.poetry.dev-dependencies]
+aiosqlite = "^0.21.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -6,6 +6,6 @@ black . > /dev/null
 echo "🛠  Building... 🛠"
 poetry build > /dev/null
 echo -n "☁️  Uploading... ☁️"
-poetry publish -u __token__ -p $TOKEN
+poetry publish -u __token__ -p $PYPI_TOKEN
 #python3 -m twine upload -r pypi dist/*
 echo "✨ All done! ✨"

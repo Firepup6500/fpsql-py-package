@@ -1,3 +1,4 @@
+# pylint: skip-file
 def edit():
     ver = input("Version: ")
     update = input("What's new?: ")

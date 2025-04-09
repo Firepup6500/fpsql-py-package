@@ -1,3 +1,4 @@
+# pylint: skip-file
 from os import environ, system
 from build import build
 
