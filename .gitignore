@@ -1,12 +1,10 @@
-.cache/*
-.cache/**
 __pycache__/**
 .upm
 venv/**
 **/__pycache__/**
 .pythonlibs/**
-replit*txt
 .config/**
+replit*txt
 .replit
-**/dist/**
-**/.env
+package/dist/**
+package/.env
