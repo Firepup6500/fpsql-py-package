@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fpsql"
-version = "1.0.7"
+version = "1.1.0"
 authors = ["Firepup650 <firepyp650@gmail.com>"]
 description = "An easy to use SQLite package"
 readme = "README.md"
